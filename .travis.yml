@@ -1,0 +1,14 @@
+dist: xenial
+language: node_js
+node_js:
+  - "8.12"
+
+install:
+  - yarn install --ignore-engines
+
+script: echo "Building..."
+
+branches:
+  only:
+    - master
+    - develop

@@ -1,59 +1,140 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-unit-jest" target="_blank" rel="noopener">unit-jest</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
+  <v-container>
+    <v-layout row justify-space-between>
+      <v-flex xs9>
+        <div id="map" class="map"></div>
+      </v-flex>
+      <v-flex xs3>
+        <div
+          class="form-check"
+          v-for="layer in layers"
+          :key="layer.id"
+        >
+          <label class="form-check-label">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              v-model="layer.active"
+              @change="layerChanged(layer.id, layer.active)"
+            />
+            {{ layer.name }}
+          </label>
+        </div>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
+<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script>
+
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String,
+  data: () => ({
+    map: null,
+    tileLayer: null,
+    layers: [
+      {
+        id: 0,
+        name: 'Restaurants',
+        active: false,
+        features: [
+          {
+            id: 0,
+            name: 'Bogart\'s Smokehouse',
+            type: 'marker',
+            coords: [38.6109607, -90.2050322],
+          },
+          {
+            id: 1,
+            name: 'Pappy\'s Smokehouse',
+            type: 'marker',
+            coords: [38.6350008, -90.2261532],
+          },
+          {
+            id: 2,
+            name: 'Broadway Oyster Bar',
+            type: 'marker',
+            coords: [38.6188362, -90.1947098],
+          },
+          {
+            id: 3,
+            name: 'Charlie Gitto\'s On the Hill',
+            type: 'marker',
+            coords: [38.617972, -90.2756436],
+          },
+          {
+            id: 4,
+            name: 'Sugarfire',
+            type: 'marker',
+            coords: [38.6304077, -90.1916921],
+          },
+          {
+            id: 5,
+            name: 'The Shaved Duck',
+            type: 'marker',
+            coords: [38.6036282, -90.2381407],
+          },
+          {
+            id: 6,
+            name: 'Mango Restaurant',
+            type: 'marker',
+            coords: [38.6313642, -90.1961267],
+          },
+          {
+            id: 7,
+            name: 'Zia\'s Restaurant',
+            type: 'marker',
+            coords: [38.6157376, -90.27716],
+          },
+          {
+            id: 8,
+            name: 'Anthonio\'s Taverna',
+            type: 'marker',
+            coords: [38.6143846, -90.280048],
+          },
+        ],
+      },
+    ],
+  }),
+  mounted() {
+    this.initMap();
+    this.initLayers();
+  },
+  methods: {
+    initMap() {
+      this.map = L.map('map').setView([38.66, -90], 12);
+      this.tileLayer = L.tileLayer(
+        'https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png',
+        {
+          maxZoom: 18,
+          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>',
+        },
+      );
+      this.tileLayer.addTo(this.map);
+    },
+    initLayers() {
+      this.layers.forEach((layer) => {
+        const markerFeatures = layer.features.filter(feature => feature.type === 'marker');
+        markerFeatures.forEach((feature) => {
+          feature.leafletObject = L.marker(feature.coords)
+            .bindPopup(feature.name);
+        });
+      });
+    },
+    layerChanged(layerId, active) {
+      const layer = this.layers.find(layer => layer.id === layerId);
+      layer.features.forEach((feature) => {
+        if (active) {
+          feature.leafletObject.addTo(this.map);
+        } else {
+          feature.leafletObject.removeFrom(this.map);
+        }
+      });
+    },
   },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+<style>
+.map { height: 600px; }
 </style>

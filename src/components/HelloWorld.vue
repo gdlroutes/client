@@ -27,82 +27,21 @@
 
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script>
+import axios from 'axios';
 
 export default {
   data: () => ({
     map: null,
     tileLayer: null,
-    layers: [
-      {
-        id: 0,
-        name: 'Restaurants',
-        active: false,
-        features: [
-          {
-            id: 0,
-            name: 'Bogart\'s Smokehouse',
-            type: 'marker',
-            coords: [38.6109607, -90.2050322],
-          },
-          {
-            id: 1,
-            name: 'Pappy\'s Smokehouse',
-            type: 'marker',
-            coords: [38.6350008, -90.2261532],
-          },
-          {
-            id: 2,
-            name: 'Broadway Oyster Bar',
-            type: 'marker',
-            coords: [38.6188362, -90.1947098],
-          },
-          {
-            id: 3,
-            name: 'Charlie Gitto\'s On the Hill',
-            type: 'marker',
-            coords: [38.617972, -90.2756436],
-          },
-          {
-            id: 4,
-            name: 'Sugarfire',
-            type: 'marker',
-            coords: [38.6304077, -90.1916921],
-          },
-          {
-            id: 5,
-            name: 'The Shaved Duck',
-            type: 'marker',
-            coords: [38.6036282, -90.2381407],
-          },
-          {
-            id: 6,
-            name: 'Mango Restaurant',
-            type: 'marker',
-            coords: [38.6313642, -90.1961267],
-          },
-          {
-            id: 7,
-            name: 'Zia\'s Restaurant',
-            type: 'marker',
-            coords: [38.6157376, -90.27716],
-          },
-          {
-            id: 8,
-            name: 'Anthonio\'s Taverna',
-            type: 'marker',
-            coords: [38.6143846, -90.280048],
-          },
-        ],
-      },
-    ],
+    layers: [],
   }),
   mounted() {
     this.initMap();
-    this.initLayers();
+    this.getLandmarks();
   },
   methods: {
     initMap() {
-      this.map = L.map('map').setView([38.66, -90], 12);
+      this.map = L.map('map').setView([20.7, -103.4], 11);
       this.tileLayer = L.tileLayer(
         'https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png',
         {
@@ -112,12 +51,24 @@ export default {
       );
       this.tileLayer.addTo(this.map);
     },
+    getLandmarks() {
+      axios(`http://localhost:8080/geodata/categories`, {method:"get"})
+      .then(response => {
+        response.data[0]["active"]=false;
+        response.data[1]["active"]=false;
+        this.layers=response.data;
+        this.initLayers();
+      })
+      .catch(e => {
+      this.errors.push(e)
+      });
+    },
     initLayers() {
       this.layers.forEach((layer) => {
         const markerFeatures = layer.features.filter(feature => feature.type === 'marker');
         markerFeatures.forEach((feature) => {
           feature.leafletObject = L.marker(feature.coords)
-            .bindPopup(feature.name);
+            .bindPopup("<h3>"+feature.name+"</h3><br>"+feature.description);
         });
       });
     },

@@ -1,10 +1,11 @@
 <template>
-  <v-container>
+  <v-layout>
     <v-layout row justify-space-between>
       <v-flex xs9>
         <div id="map" class="map"></div>
       </v-flex>
-      <v-flex xs3>
+      <v-flex xs3 pa-4>
+        
         <div
           class="form-check"
           v-for="layer in layers"
@@ -22,14 +23,18 @@
         </div>
       </v-flex>
     </v-layout>
-  </v-container>
+  </v-layout>
 </template>
 
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script>
+import Toolbar from './Toolbar.vue';
 import axios from 'axios';
 
 export default {
+  components: {
+    Toolbar,
+  },
   data: () => ({
     map: null,
     tileLayer: null,

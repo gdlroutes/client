@@ -1,31 +1,45 @@
 <template>
-  <v-layout >
     <v-navigation-drawer
     v-model="drawer"
     :mini-variant.sync="mini"
-    
-    dark
-    class="light-blue darken-4"
+      hide-overlay
+      dark
+      dense
+      floating
+    class="backg"
     >
       <v-layout column fill-height>
-        <v-toolbar flat class="transparent" >
-                <v-btn
-                  icon
-                  @click.stop="mini = !mini"
-                >
-                  <v-icon>menu</v-icon>
-                </v-btn>
-                <v-list-tile-content>
-                <v-list-tile-title>GDL Walks</v-list-tile-title>
-              </v-list-tile-content>
-        </v-toolbar>
+        
       
         <v-list class="pt-0" dense>
+            <br>
+            <v-list-tile pa>
+
+              <v-list-tile-action>
+                <v-btn icon @click.stop="mini = !mini">
+                  <v-icon>menu</v-icon>
+                </v-btn>
+              </v-list-tile-action>
+
+              <v-list-tile-content>
+                <v-layout>
+                  <v-spacer></v-spacer>
+                  <div class="display-1 gdl font-weight-black">GDL</div>
+                  <div class="display-1 wlk font-weight-thin">Walks</div>
+                  <v-spacer></v-spacer>
+                </v-layout>
+              </v-list-tile-content>
+
+          </v-list-tile>
+          <br>
+           
+  
           <v-divider></v-divider>
 
           <v-list-tile
             v-for="item in items"
             :key="item.title"
+            :to="item.type"
             @click="changeElement(item.type)"
           >
             <v-list-tile-action>
@@ -51,16 +65,13 @@
           </v-list>
       </v-layout>
     </v-navigation-drawer>
-    <v-layout row fill-height>
-      <Map v-if="showMap"/>
-    </v-layout>
-  </v-layout>
 </template>
 
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script>
 import Map from './Map.vue'
 import axios from 'axios';
+
 export default {
   components: {
     Map
@@ -68,9 +79,9 @@ export default {
   data: () => ({
     drawer: true,
     items: [
-      { title: 'Buscar Rutas', icon: 'search', type: 'info' },
-      { title: 'Crear Rutas', icon: 'add', type: 'map' },
-      { title: 'Mis Rutas', icon: 'favorite', type: 'info' }
+      { title: 'Buscar Rutas', icon: 'search', type: './Search' },
+      { title: 'Crear Rutas', icon: 'add', type: './home' },
+      { title: 'Mis Rutas', icon: 'favorite', type: './Fav' }
     ],
     showMap : true,
     mini: true,

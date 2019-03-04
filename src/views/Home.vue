@@ -1,13 +1,18 @@
 <template>
-  <HelloWorld />
+  <v-layout>
+      <Drawer>
+
+      </Drawer>
+  <router-view></router-view>
+  </v-layout>
 </template>
 
 <script>
-import HelloWorld from '../components/HelloWorld.vue';
+import Drawer from '../components/Drawer.vue';
 
 export default {
   components: {
-    HelloWorld,
+    Drawer,
   },
 };
 </script>

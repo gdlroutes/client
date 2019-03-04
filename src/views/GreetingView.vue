@@ -9,7 +9,7 @@
 
         </v-layout>          
       </v-flex>
-            <v-flex xs6 class="colored" fill-height align-start>
+      <v-flex xs6 class="colored" fill-height align-start>
         <v-card flat tile color="#ecf0f1" class="colored" height="100%">
           <v-layout align-end justify-end row fill-height pl-5>
             <v-img :src="require('../assets/set.svg')"></v-img>

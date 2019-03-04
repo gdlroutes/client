@@ -1,7 +1,7 @@
 <template lang="html">
 
   <v-layout class="title">
-    <v-flex xs12 sm10 offset-sm1>
+    <v-flex xs12 sm10 offset-sm2>
       <v-card flat tile >
         <v-layout row wrap>
           <v-flex xs12>

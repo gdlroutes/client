@@ -14,7 +14,7 @@
       </v-card>
     </v-dialog>
 
-    <v-flex xs12 sm10 offset-sm1>
+    <v-flex xs12 sm10 offset-sm2>
       <v-card flat>
         <v-layout row wrap>
           <v-flex xs12>

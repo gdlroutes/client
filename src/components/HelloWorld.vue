@@ -1,96 +1,94 @@
 <template>
-  <v-layout>
-    <v-layout row justify-space-between>
-      <v-flex xs9>
-        <div id="map" class="map"></div>
-      </v-flex>
-      <v-flex xs3 pa-4>
-        
-        <div
-          class="form-check"
-          v-for="layer in layers"
-          :key="layer.id"
-        >
-          <label class="form-check-label">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              v-model="layer.active"
-              @change="layerChanged(layer.id, layer.active)"
-            />
-            {{ layer.name }}
-          </label>
-        </div>
-      </v-flex>
+  <v-layout >
+    <v-navigation-drawer
+    v-model="drawer"
+    :mini-variant.sync="mini"
+    
+    dark
+    class="light-blue darken-4"
+    >
+      <v-layout column fill-height>
+        <v-toolbar flat class="transparent" >
+                <v-btn
+                  icon
+                  @click.stop="mini = !mini"
+                >
+                  <v-icon>menu</v-icon>
+                </v-btn>
+                <v-list-tile-content>
+                <v-list-tile-title>GDL Walks</v-list-tile-title>
+              </v-list-tile-content>
+        </v-toolbar>
+      
+        <v-list class="pt-0" dense>
+          <v-divider></v-divider>
+
+          <v-list-tile
+            v-for="item in items"
+            :key="item.title"
+            @click="changeElement(item.type)"
+          >
+            <v-list-tile-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-tile-action>
+
+            <v-list-tile-content>
+              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+        <v-spacer></v-spacer>
+          <v-list class="">
+            <v-list-tile avatar>
+              <v-list-tile-avatar>
+                <img src="https://randomuser.me/api/portraits/men/82.jpg">
+              </v-list-tile-avatar>
+
+              <v-list-tile-content>
+                <v-list-tile-title>John Leider</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+      </v-layout>
+    </v-navigation-drawer>
+    <v-layout row fill-height>
+      <Map v-if="showMap"/>
     </v-layout>
   </v-layout>
 </template>
 
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script>
-import Toolbar from './Toolbar.vue';
+import Map from './Map.vue'
 import axios from 'axios';
-
 export default {
   components: {
-    Toolbar,
+    Map
   },
   data: () => ({
-    map: null,
-    tileLayer: null,
-    layers: [],
+    drawer: true,
+    items: [
+      { title: 'Buscar Rutas', icon: 'search', type: 'info' },
+      { title: 'Crear Rutas', icon: 'add', type: 'map' },
+      { title: 'Mis Rutas', icon: 'favorite', type: 'info' }
+    ],
+    showMap : true,
+    mini: true,
+    right: null,
   }),
-  mounted() {
-    this.initMap();
-    this.getLandmarks();
-  },
   methods: {
-    initMap() {
-      this.map = L.map('map').setView([20.7, -103.4], 11);
-      this.tileLayer = L.tileLayer(
-        'https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png',
-        {
-          maxZoom: 18,
-          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>',
-        },
-      );
-      this.tileLayer.addTo(this.map);
-    },
-    getLandmarks() {
-      axios(`http://localhost:8080/geodata/categories`, {method:"get"})
-      .then(response => {
-        response.data[0]["active"]=false;
-        response.data[1]["active"]=false;
-        this.layers=response.data;
-        this.initLayers();
-      })
-      .catch(e => {
-      this.errors.push(e)
-      });
-    },
-    initLayers() {
-      this.layers.forEach((layer) => {
-        const markerFeatures = layer.features.filter(feature => feature.type === 'marker');
-        markerFeatures.forEach((feature) => {
-          feature.leafletObject = L.marker(feature.coords)
-            .bindPopup("<h3>"+feature.name+"</h3><br>"+feature.description);
-        });
-      });
-    },
-    layerChanged(layerId, active) {
-      const layer = this.layers.find(layer => layer.id === layerId);
-      layer.features.forEach((feature) => {
-        if (active) {
-          feature.leafletObject.addTo(this.map);
-        } else {
-          feature.leafletObject.removeFrom(this.map);
-        }
-      });
-    },
-  },
+    changeElement(type) {
+      if (type=='map'){
+        this.showMap=true;
+      }else{
+        this.showMap=false;
+      }
+    }
+  }
 };
 </script>
 
 <style>
-.map { height: 600px; }
+.map { height: 100%; }
+
 </style>

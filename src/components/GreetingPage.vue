@@ -38,8 +38,6 @@ export default {
     background-color: #ffc048;
 }
 
-
-
 .leftCosa{
 background-color: #ffa801;
     height: 100%;
@@ -49,7 +47,7 @@ background-color: #ffa801;
     max-width: 100%
 }
 .rightCosa{
-background-color: #FFF;
+background-color: #ecf0f1;
     height: 100%;
     width: 100%;
     padding: 0%;

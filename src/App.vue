@@ -1,10 +1,9 @@
 <template>
   <v-app>
-      <Toolbar/>
-      <br>
-      <br>
-      <br>
-      <HelloWorld/>
+
+      <router-view>
+      </router-view>
+
   </v-app>
 </template>
 

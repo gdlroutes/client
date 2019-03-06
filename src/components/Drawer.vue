@@ -6,7 +6,7 @@
       dark
       dense
       floating
-    class="backg"
+    class="backg blue darken-4"
     >
       <v-layout column fill-height>
         

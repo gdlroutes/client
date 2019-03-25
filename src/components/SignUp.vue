@@ -21,7 +21,7 @@
                         dense
                         v-model="name"
                         :error-messages="nameErrors"
-                        label="Nombre(s)"
+                        label="Nombre Completo"
                         required
                         @input="$v.name.$touch()"
                         @blur="$v.name.$touch()"
@@ -138,12 +138,9 @@
     validations: {
       user: { required, maxLength: maxLength(64), minLength: minLength(2) },
       name: { required, maxLength: maxLength(64), minLength: minLength(2) },
-      lName1: { required, maxLength: maxLength(64), minLength: minLength(2) },
-      lName2: { maxLength: maxLength(64), minLength: minLength(2) },
       pass: { required, minLength: minLength(10), notAN: not(alphaNum), hasNum, hasUpper, hasLower},
       pass2: { required, sameAs: sameAs('pass') },
       email: { required, email },
-      checkbox: { checked (val) { return val } }
     },
     password: 'Password',
     data: () => ({
@@ -152,21 +149,12 @@
       name: '',
       show1: false,
       show2: false,
-      lName1: '',
-      lName2: '',
       pass: '',
       pass2: '',
       email: '',
-      checkbox: false
     }),
 
     computed: {
-      checkboxErrors () {
-        const errors = []
-        if (!this.$v.checkbox.$dirty) return errors
-        !(this.$v.checkbox.$model === true) && errors.push('Debes aceptar los términos y condiciones para crear una cuenta')
-        return errors
-      },
       nameErrors () {
         const errors = []
         if (!this.$v.name.$dirty) return errors
@@ -181,21 +169,6 @@
         !this.$v.user.maxLength && errors.push('Este campo debe tener menos de 64 caracteres')
         !this.$v.user.minLength && errors.push('Este campo debe tener al menos de 2 caracteres')
         !this.$v.user.required && errors.push('Este es un campo requerido')
-        return errors
-      },
-      lName1Errors () {
-        const errors = []
-        if (!this.$v.lName1.$dirty) return errors
-        !this.$v.lName1.maxLength && errors.push('Este campo debe tener menos de 64 caracteres')
-        !this.$v.lName1.minLength && errors.push('Este campo debe tener al menos de 2 caracteres')
-        !this.$v.lName1.required && errors.push('Este es un campo requerido')
-        return errors
-      },
-      lName2Errors () {
-        const errors = []
-        if (!this.$v.lName2.$dirty) return errors
-        !this.$v.lName2.maxLength && errors.push('Este campo debe tener menos de 64 caracteres')
-        !this.$v.lName2.minLength && errors.push('Este campo debe tener al menos de 2 caracteres')
         return errors
       },
       passErrors () {
@@ -227,27 +200,22 @@
 
     methods: {
       register (){
-          router.push('home')
-          /*
         if(this.$v.$anyError || !this.$v.$anyDirty){
           this.$v.$touch()
         } else {
-        axios.post(process.env.VUE_APP_SCHEME+'://'+process.env.VUE_APP_HOST+process.env.VUE_APP_PORT+process.env.VUE_APP_PREFIX+'/signup',
+        axios.post('http://localhost:8080/users/signup',
           {
           'username': this.user,
-          'first_name': this.name,
-          'middle_name': this.lName2,
-          'last_name' : this.lName1,
           'email': this.email,
           'password': this.pass
           })
           .then(response => {
             if(response.status === 200){
-              router.push('signin')
+              router.push('home')
             } 
             })
           .catch()
-        }*/
+        }
       }
     }
   }

@@ -117,9 +117,6 @@
     },
     methods: {
       check2 () {
-        router.push('home')
-          
-          /*
         if(this.$v.$anyError || !this.$v.$anyDirty){
           this.$v.$touch()
         } else {
@@ -131,7 +128,7 @@
         } else {
           body = { 'username': this.user, 'password': this.pass, 'WithCredentials': true };
         }
-          axios(process.env.VUE_APP_SCHEME+'://'+process.env.VUE_APP_HOST+process.env.VUE_APP_PORT+process.env.VUE_APP_PREFIX+'/login',
+          axios('http://localhost:8080/users/login',
           {
             method: "post",
             data: body,
@@ -139,7 +136,7 @@
           })
           .then(response => {
             if(response.status === 200){
-              router.push('main')
+              router.push('home');
               
             }
           }).catch(
@@ -151,7 +148,7 @@
               this.pass = "";
           }
           );
-        }*/
+        }
       }
     }
   }

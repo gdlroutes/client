@@ -4,6 +4,7 @@ import GreetingView from './views/GreetingView.vue';
 import Home from './views/Home.vue';
 import SignUp from './components/SignUp.vue';
 import Map from './components/Map.vue';
+import CreateWalk from './components/CreateWalk.vue';
 import Fav from './components/Fav.vue';
 import Search from './components/Search.vue';
 import SignIn from './components/SignIn.vue';
@@ -38,6 +39,10 @@ export default new Router({
         {
           path: '/',
           component: Map
+        },
+        {
+          path: '/Add',
+          component: CreateWalk
         },
         {
           path: '/Search',

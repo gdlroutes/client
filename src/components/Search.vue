@@ -13,7 +13,7 @@
           </v-card>
         </v-flex>
       <v-flex xs12 pl-3 mb-3 v-for="(walk,i) in walks" :key="i">
-      <RoutePreview :walk="walk"/>
+        <RoutePreview :walk="walk"/>
       </v-flex>
     </v-layout>
 
@@ -23,6 +23,7 @@
 
 <script>
 import RoutePreview from './RoutePreview.vue';
+import router from '../router'
 
 export default {
   name: 'Search',
@@ -51,6 +52,28 @@ export default {
       },
     ]
   }),
+  mounted(){
+        let self = this
+        this.$root.$on('test',function (data) {
+            router.push('search')
+
+            var cosa = JSON.parse(this.$localStorage.get('mWalks'));
+            if (cosa){
+              cosa.push(data);
+              self.$localStorage.set('mWalks', JSON.stringify(cosa));
+          } else {
+              self.$localStorage.set('mWalks', JSON.stringify([data, ...self.walks]));
+          }
+            // this.walks.push(data);
+            console.log(self.walks);
+        });
+
+      const cosa = JSON.parse(self.$localStorage.get('mWalks'));
+      if (cosa){
+        self.walks = cosa;
+      }
+
+    }
 }
 </script>
 

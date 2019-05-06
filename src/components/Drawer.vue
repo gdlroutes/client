@@ -55,7 +55,7 @@
           <v-list class="pt-0 mt-2" dense>
             <v-list-tile avatar>
               <v-list-tile-avatar>
-                <img src="https://randomuser.me/api/portraits/men/82.jpg">
+                <img src="https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png">
               </v-list-tile-avatar>
               <v-list-tile-content>
                 <v-list-tile-title>John Leider</v-list-tile-title>

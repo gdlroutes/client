@@ -55,10 +55,10 @@
           <v-list class="pt-0 mt-2" dense>
             <v-list-tile avatar>
               <v-list-tile-avatar>
-                <img src="https://randomuser.me/api/portraits/men/82.jpg">
+                <img src="https://www.flynz.co.nz/wp-content/uploads/profile-placeholder.png">
               </v-list-tile-avatar>
               <v-list-tile-content>
-                <v-list-tile-title>John Leider</v-list-tile-title>
+                <v-list-tile-title>Test User</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list>

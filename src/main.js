@@ -3,6 +3,8 @@ import './plugins/vuetify';
 import App from './App.vue';
 import router from './router';
 import Vuetify from 'vuetify'
+import VueLocalStorage from 'vue-localstorage'
+Vue.use(VueLocalStorage)
 
 
 Vue.config.productionTip = false;

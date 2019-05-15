@@ -49,7 +49,7 @@ export default {
   }),
   mounted() {
     let self = this;
-    axios.get(process.env.VUE_APP_APIURL+'geodata/routes')
+    axios.get(process.env.VUE_APP_APIURL+'/geodata/routes')
     .then( response => {
         if(response.status === 200){
             console.log(response.data);

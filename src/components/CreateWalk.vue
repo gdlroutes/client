@@ -108,7 +108,7 @@ export default {
     addroute() {
       this.route.waypoints = this.mRouting.getWaypoints();
 
-       axios(process.env.VUE_APP_APIURL+'geodata/routes', 
+       axios(process.env.VUE_APP_APIURL+'/geodata/routes', 
       {method:"post",data:this.route,withCredentials:true })
       .then( response => {
         

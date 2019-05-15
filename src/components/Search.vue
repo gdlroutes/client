@@ -1,18 +1,50 @@
 <template>
-  <v-layout class="cont">
-    <v-layout row wrap>
-      <v-flex xs8 pt-3 pl-3 pb-4>
-        <v-card light flat>
+    <v-layout row class="cont" pa-4>
+      <v-flex xs12 >
+        <v-card light flat align-start justify-start row fill-height>
           <v-toolbar class="bg" flat>
-            <v-text-field solo prepend-inner-icon="search" single-line></v-text-field>
+            <v-overflow-btn
+              solo
+              prepend-inner-icon="search"
+              :items="categories"
+              label="Buscar por categoría"
+              target="#dropdown-example"
+            ></v-overflow-btn>
           </v-toolbar>
+  
+          <v-list three-line subheader class="cont pa-0 ">
+  
+          <template v-for="(walk, i) in walks">
+            <v-list-tile
+              class="cont"
+              :key="i"
+              avatar
+            >
+              <v-list-tile-avatar>
+                <v-icon :class="[getIconClass(walk.category_id)]">{{getIcon(walk.category_id)}}</v-icon>
+              </v-list-tile-avatar>
+  
+              <v-list-tile-content>
+                <v-list-tile-title>{{ walk.name }}</v-list-tile-title>
+                <v-list-tile-sub-title>{{ walk.description }}</v-list-tile-sub-title>
+              </v-list-tile-content>
+  
+              <v-list-tile-action>
+                <v-btn icon ripple>
+                  <v-icon color="grey lighten-1">more_horiz</v-icon>
+                </v-btn>
+              </v-list-tile-action>
+            </v-list-tile>
+            <v-divider
+            class="cont pa-0"
+              v-if="i + 1 < walks.length"
+              :key="i"
+            ></v-divider>
+            </template>
+          </v-list>
         </v-card>
       </v-flex>
-      <v-flex xs12 pl-3 mb-3 v-for="(walk,i) in walks" :key="i">
-        <RoutePreview :walk="walk"/>
-      </v-flex>
     </v-layout>
-  </v-layout>
 </template>
 
 <script>
@@ -30,22 +62,27 @@ export default {
       {
         name: "Ruta Histórica",
         author: "Ximena Torres",
-        description: "description",
-        waypoints: []
+        description: "jhbjhbjh",
+        points: [],
+        category_id: 1
       },
       {
         name: "Arte Contemporáneo en Guadalajara",
         author: "Lalo Ortiz",
         description: "description",
-        waypoints: []
+        points: [],
+        category_id: 2
       },
       {
         name: "Ruta del Aguacate",
         author: "Antonio Felipe",
         description: "description",
-        waypoints: []
+        points: [],
+        category_id: 3
       }
-    ]
+    ],
+    categories: ['Naturaleza', 'Arte y Cultura', 'Gastronómica', 'Recreativa', 'Todas'],
+
   }),
   mounted() {
     let self = this;
@@ -59,12 +96,46 @@ export default {
     .catch(error => {
       const cosa = JSON.parse(self.$localStorage.get("mWalks"));
       if (cosa) {
-        self.walks = cosa;
+        //self.walks = cosa;
       }
     })
 
     
-  }
+  },
+      methods: {
+        getIconClass(category_id) {
+            console.log(category_id)            
+            switch (category_id) {
+                case 1:          
+                return 'blue white--text';
+                case 2:
+                return 'purple white--text';
+                case 3:
+                return 'light-green white--text';
+                case 4:
+                return 'amber white--text';
+                default:
+                return 'lime white--text';
+            }
+        },
+        getIcon(category_id) {            
+            switch (category_id) {
+                case 1:          
+                return 'tag_faces';
+                break;
+                case 2:
+                return 'palette';
+                break;
+                case 3:
+                return 'local_florist';
+                break;
+                case 4:
+                return 'restaurant';
+                default:
+                return 'local_play';
+            }
+        },
+    }
 };
 </script>
 

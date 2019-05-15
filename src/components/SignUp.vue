@@ -203,7 +203,7 @@
         if(this.$v.$anyError || !this.$v.$anyDirty){
           this.$v.$touch()
         } else {
-        axios.post(process.env.VUE_APP_APIURL+'/users/signup',
+        axios.post(process.env.VUE_APP_APIURL+'users/signup',
           {
           'username': this.user,
           'email': this.email,

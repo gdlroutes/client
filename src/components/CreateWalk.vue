@@ -26,7 +26,7 @@
                                 <v-overflow-btn
                                   class="bttn"
                                   :items="dropdown_font"
-                                  v-model="route.category"
+                                  v-model="categoryName"
                                   label="Categoria"
                                 ></v-overflow-btn>
                               </v-flex>
@@ -86,12 +86,12 @@ export default {
     layers: [],
     mRouting: null,
     controlLayers: [],
+    categoryName: "",
     route: {
       name: "",
-      category: "",
+      category: 1,
       description: "",
-      waypoints: "",
-      author: "Test User"
+      waypoints: [],
     }
   }),
   mounted() {
@@ -106,7 +106,30 @@ export default {
   },
   methods: {
     addroute() {
-      this.route.waypoints = this.mRouting.getWaypoints();
+      let self = this;
+      
+      switch (this.categoryName) {
+        case 'Recreativo':
+          self.route.category = 1;
+          break;
+        case 'Arte y Cultura':
+          self.route.category = 2;
+          break;
+        case 'Naturaleza':
+          self.route.category = 3;
+          break;
+        case 'Gastronómica':
+          self.route.category = 4;
+          break;
+        default:
+          self.route.category = 0;
+      }
+
+      var waypoints = this.mRouting.getWaypoints();
+      waypoints.forEach(function(waypoint){
+        self.route.waypoints.push([waypoint.latLng.lat,waypoint.latLng.lng]);
+      });
+      console.log(self.route)
 
        axios(process.env.VUE_APP_APIURL+'geodata/routes', 
       {method:"post",data:this.route,withCredentials:true })

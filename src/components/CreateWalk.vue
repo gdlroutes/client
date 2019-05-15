@@ -89,9 +89,9 @@ export default {
     categoryName: "",
     route: {
       name: "",
-      category: 1,
+      category_id: 1,
       description: "",
-      waypoints: [],
+      points: [],
     }
   }),
   mounted() {
@@ -110,24 +110,24 @@ export default {
       
       switch (this.categoryName) {
         case 'Recreativo':
-          self.route.category = 1;
+          self.route.category_id = 1;
           break;
         case 'Arte y Cultura':
-          self.route.category = 2;
+          self.route.category_id = 2;
           break;
         case 'Naturaleza':
-          self.route.category = 3;
+          self.route.category_id = 3;
           break;
         case 'Gastronómica':
-          self.route.category = 4;
+          self.route.category_id = 4;
           break;
         default:
-          self.route.category = 0;
+          self.route.category_id = 0;
       }
 
       var waypoints = this.mRouting.getWaypoints();
       waypoints.forEach(function(waypoint){
-        self.route.waypoints.push([waypoint.latLng.lat,waypoint.latLng.lng]);
+        self.route.points.push([waypoint.latLng.lat,waypoint.latLng.lng]);
       });
       console.log(self.route)
 

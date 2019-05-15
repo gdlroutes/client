@@ -58,7 +58,7 @@
                 <img src="https://www.flynz.co.nz/wp-content/uploads/profile-placeholder.png">
               </v-list-tile-avatar>
               <v-list-tile-content>
-                <v-list-tile-title>Test User</v-list-tile-title>
+                <v-list-tile-title>{{username}}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list>
@@ -86,6 +86,7 @@ export default {
     showMap : true,
     mini: true,
     right: null,
+    username: "",
   }),
   methods: {
     changeElement(type) {
@@ -95,7 +96,15 @@ export default {
         this.showMap=false;
       }
     }
-  }
+  },
+  mounted(){
+    var name = JSON.parse(this.$localStorage.get('username'));
+    if(name){
+      this.username = name.value;
+    } else {
+      this.username = "testuser";
+    }
+  },
 };
 </script>
 

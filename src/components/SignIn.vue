@@ -62,6 +62,8 @@
                     <v-spacer></v-spacer>
                     <v-btn round outline to='./SignUp' color="#4b6584">Crear una cuenta</v-btn>
                     <v-spacer></v-spacer>
+                    <v-btn round outline @click="login('https://solid.community')" color="#4b6584">Usar Solid Inrupt</v-btn>
+                    <v-spacer></v-spacer>
                     </v-layout>
 
                   </v-container>
@@ -83,9 +85,13 @@
 
 
 <script>
+  const auth = require('solid-auth-client')
+  let solid = {auth}
+
+  
   import axios from 'axios';
   import router from '../router';
-    import { validationMixin } from 'vuelidate'
+  import { validationMixin } from 'vuelidate'
   import { required } from 'vuelidate/lib/validators'
   export default {
      mixins: [validationMixin],
@@ -101,6 +107,29 @@
       pass: '',
       error: ''
     }),
+    mounted(){
+      solid.auth.trackSession(session => {
+        if (!session){
+          console.log('The user is not logged in')
+        } else {
+          
+          let self = this;
+          const store = $rdf.graph();
+          const me = store.sym(session.webId);
+          const profile = me.doc() 
+          const VCARD = new $rdf.Namespace('http://www.w3.org/2006/vcard/ns#');
+          const fetcher =new $rdf.Fetcher(store);
+
+          fetcher.load(profile).then(response => {
+            let name = store.any(me, VCARD('fn'));
+            self.$localStorage.set('username', JSON.stringify(name));
+            router.push('home');
+          }, err => {
+            console.log("Load failed" +  err);
+          });
+        }
+      })
+    },
     computed: {
       userErrors () {
         const errors = []
@@ -116,6 +145,32 @@
       }
     },
     methods: {
+      async login(idp) {
+        let self = this;
+        const session = await solid.auth.currentSession();
+        if (!session)
+          await solid.auth.login(idp);
+        else{
+          alert(`Logged in with ${session.webId}`);
+
+          const store = $rdf.graph();
+          const me = store.sym(session.webId);
+          const profile = me.doc() 
+          const VCARD = new $rdf.Namespace('http://www.w3.org/2006/vcard/ns#');
+          const fetcher =new $rdf.Fetcher(store);
+
+          fetcher.load(profile).then(response => {
+            let name = store.any(me, VCARD('fn'));
+            self.$localStorage.set('username', JSON.stringify(name));
+            router.push('home');
+          }, err => {
+            console.log("Load failed" +  err);
+          });
+
+          
+        }
+
+      },
       check2 () {
         if(this.$v.$anyError || !this.$v.$anyDirty){
           this.$v.$touch()

@@ -89,14 +89,14 @@ export default {
     axios.get(process.env.VUE_APP_APIURL+'geodata/routes')
     .then( response => {
         if(response.status === 200){
-            console.log(response.data);
+            self.walks=response.data;
             
         }
     })
     .catch(error => {
       const cosa = JSON.parse(self.$localStorage.get("mWalks"));
       if (cosa) {
-        //self.walks = cosa;
+        self.walks = cosa;
       }
     })
 

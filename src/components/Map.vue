@@ -28,7 +28,14 @@ export default {
       url: "https://services9.arcgis.com/31Z5spKs4XbGMjHK/arcgis/rest/services/gdlpoi/FeatureServer/0/",
     }).addTo(map);
 
-    var popupTemplate = "<h3>{nombre}</h3>{descripcion}";
+    var popupTemplate = `
+      <divs>
+      <div class="headline">{nombre}</div>
+      <p>{descripcion}</p>
+      <hr>
+      <span>Servicios: {servicios}</span>
+      </div>
+  `;
 
     parks.bindPopup(function(e){
       return L.Util.template(popupTemplate, e.feature.properties)
@@ -39,5 +46,6 @@ export default {
 
 <style>
 .map { height: 100%; }
+
 
 </style>
